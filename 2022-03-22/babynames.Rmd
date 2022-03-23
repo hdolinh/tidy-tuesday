@@ -13,7 +13,8 @@ librarian::shelf(
   tidytuesdayR,
   tidyverse,
   ggridges,
-  sysfonts # add google fonts
+  sysfonts, # add google fonts
+  ggforce
 )
 ```
 
@@ -108,5 +109,22 @@ ggplot(millenials_babynames, aes(x = year, y = n, color = name)) +
   geom_line()
 ```
 
+# Noah Baby Name Recreation
+
+```{r}
+# adding Google Fonts
+sysfonts::font_add_google(name = "Grandstander", family = "Grandstander")
+sans <- "Grandstander"
+
+# filtering noah 
+noah <- babynames %>% 
+  filter(name == "Noah") %>% 
+  filter(year == 2011)
+
+# generating font
+ggplot(NULL) +
+  ggforce::geom_arc_bar(aes(x0 = 0, y0 = 0, r0 = 1, r = 1.3, amount = n,
+                            fill = sex), color = NA, stat = "pie", data = noah)
+```
 
 
