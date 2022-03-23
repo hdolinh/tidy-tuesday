@@ -1,0 +1,112 @@
+---
+title: "Baby Names"
+author: "Halina Do-Linh"
+date: "3/22/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# attached packages
+librarian::shelf(
+  tidytuesdayR,
+  tidyverse,
+  ggridges,
+  sysfonts # add google fonts
+)
+```
+
+# Baby Names
+
+Load data
+```{r}
+babynames <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-03-22/babynames.csv')
+```
+
+Explore data
+```{r}
+halina_babyname <- babynames %>% 
+  filter(name == "Halina")
+```
+
+```{r}
+ggplot(data = halina_babyname, aes(x = year, y = n, color = sex)) +
+  geom_line()
+```
+
+```{r}
+noah_babyname <- babynames %>% 
+  filter(name == "Noah")
+```
+
+```{r}
+noah_gender_babyname <- babynames %>% 
+  filter(name == "Noah") %>% 
+  group_by(sex) %>% 
+  summarize(sum = sum(n))
+```
+
+
+```{r}
+ggplot(data = noah_babyname, aes(x = year, y = n)) +
+  geom_bar(stat = "identity")
+```
+
+```{r}
+ggplot(data = noah_babyname, aes(x = year, y = prop, color = sex)) +
+  geom_line()
+```
+
+```{r}
+yr_babyname <- babynames %>% 
+  group_by(year, sex) %>% 
+  summarize(total = sum(n))
+```
+
+
+```{r}
+ggplot(data = yr_babyname, aes(x = year, y = total, color = sex)) +
+  geom_line()
+```
+
+
+```{r}
+top_ten_halina <- c("Halina", "Jessica", "Ashley", "Jennifer", "Amanda", "Sarah",
+                    "Stephanie", "Elizabeth", "Brittany", "Nicole", "Emily")
+```
+
+```{r}
+millenials_babynames <- babynames %>% 
+  filter(year >= 1981,
+         year <= 1996) %>% 
+  filter(sex == "F") %>% 
+  group_by(name) %>% 
+  summarize(total_count = sum(n)) %>% 
+  filter(name %in% top_ten_halina)
+```
+
+
+```{r}
+millenials_babynames <- babynames %>%
+  filter(year >= 1981,
+         year <= 1996) %>% 
+  filter(sex == "F") %>% 
+  filter(name %in% top_ten_halina)
+```
+
+
+```{r}
+ggplot(millenials_babynames, aes(x = n, y = name, fill = name)) +
+  geom_density_ridges()
+  # theme_ridges() + 
+  # theme(legend.position = "none")
+```
+
+```{r}
+ggplot(millenials_babynames, aes(x = year, y = n, color = name)) +
+  geom_line()
+```
+
+
+
